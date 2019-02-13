@@ -25,6 +25,18 @@ app.use(express.static(publicPath));
 io.on("connection", (socket) => {
     console.log("New user connected");
 
+    socket.emit("newMessage", {
+        from: "Admin",
+        text: "Welcome to the chat App!",
+        createdAt: new Date().toString()
+    });
+
+    socket.broadcast.emit("newMessage", {
+        from: "Admin",
+        text: "New user joined",
+        createdAt: new Date().toString()
+    })
+
     // create a custom event; specify data sent
     // socket.emit("newMessage", {
     //     from: "jenny@example.com",
@@ -43,13 +55,23 @@ io.on("connection", (socket) => {
         console.log("createMessage", newMessage);
         // socket.emit emits a message to a single connection
         // socket.emit("newMessage", newMessage);
+
+
         // io.emit emits an event to every single connection
         io.emit("newMessage", {
             from: newMessage.from,
             text: newMessage.text,
             createdAt: new Date().getTime()
         });
-    })
+
+        // send to everybody except this socket
+        // socket.broadcast.emit("newMessage", {
+        //     from: newMessage.from,
+        //     text: newMessage.text,
+        //     createdAt: new Date().toString()
+        // });
+
+    });
 
     // inside nodeJs can safely use arrow functions
     // socket.on("createEmail", (newEmail) => {
