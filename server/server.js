@@ -24,9 +24,35 @@ app.use(express.static(publicPath));
 // register an event listener
 io.on("connection", (socket) => {
     console.log("New user connected");
+
+    // create a custom event; specify data sent
+    socket.emit("newMessage", {
+        from: "jenny@example.com",
+        text: "First message",
+        createdAt: new Date().toString()
+    })
+
+    // create a custom event; specify data sent
+    // socket.emit("newEmail", {
+    //     from: "jenny@example.com",
+    //     text: "Hey! What's going on?",
+    //     createdAt: 123
+    // });
+
+    socket.on("createMessage", (newMessage) => {
+        console.log("createMessage", newMessage);
+        // socket.emit("newMessage", newMessage);
+    })
+
+    // inside nodeJs can safely use arrow functions
+    // socket.on("createEmail", (newEmail) => {
+    //     console.log("createEmail", newEmail);
+    // });
+
     socket.on("disconnect", () => {
         console.log("Client disconnected");
-    })
+    });
+
 });
 
 
