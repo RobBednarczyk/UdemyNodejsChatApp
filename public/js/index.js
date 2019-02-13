@@ -11,10 +11,10 @@ socket.on("connect", function() {
     //     text: "Hey! This is Jenny!"
     // })
 
-    socket.emit("createMessage", {
-        from: "andrew@example.com",
-        text: "Some very secret message"
-    });
+    // socket.emit("createMessage", {
+    //     from: "andrew@example.com",
+    //     text: "Some very secret message"
+    // });
 
 });
 

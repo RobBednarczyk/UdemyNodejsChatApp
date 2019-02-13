@@ -26,11 +26,11 @@ io.on("connection", (socket) => {
     console.log("New user connected");
 
     // create a custom event; specify data sent
-    socket.emit("newMessage", {
-        from: "jenny@example.com",
-        text: "First message",
-        createdAt: new Date().toString()
-    })
+    // socket.emit("newMessage", {
+    //     from: "jenny@example.com",
+    //     text: "First message",
+    //     createdAt: new Date().toString()
+    // });
 
     // create a custom event; specify data sent
     // socket.emit("newEmail", {
@@ -41,7 +41,14 @@ io.on("connection", (socket) => {
 
     socket.on("createMessage", (newMessage) => {
         console.log("createMessage", newMessage);
+        // socket.emit emits a message to a single connection
         // socket.emit("newMessage", newMessage);
+        // io.emit emits an event to every single connection
+        io.emit("newMessage", {
+            from: newMessage.from,
+            text: newMessage.text,
+            createdAt: new Date().getTime()
+        });
     })
 
     // inside nodeJs can safely use arrow functions
