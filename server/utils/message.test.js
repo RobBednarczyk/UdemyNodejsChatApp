@@ -9,7 +9,7 @@ describe("generateMessage", () => {
         expect(res.from).toBe(from);
         expect(res.text).toBe(text);
         //expect(res).toInclude({from, text});
-        expect(typeof res.createdAt).toBe("string");
+        expect(typeof res.createdAt).toBe("number");
     });
 });
 
@@ -22,6 +22,6 @@ describe("generateLocationMessage", () => {
         var res = generateLocationMessage(from, latitude, longitude);
         expect(res.from).toBe(from);
         expect(res.url).toBe(url);
-        expect(typeof res.createdAt).toBe("string");
+        expect(typeof res.createdAt).toBe("number");
     })
 })
