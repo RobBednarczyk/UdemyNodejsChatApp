@@ -32,7 +32,7 @@ io.on("connection", (socket) => {
     //     text: "Welcome to the chat App!",
     //     createdAt: new Date().toString()
     // });
-    socket.broadcast.emit("newMessage", "New user joined");
+    socket.broadcast.emit("newMessage", generateMessage("Admin", "New user joined"));
     // socket.broadcast.emit("newMessage", {
     //     from: "Admin",
     //     text: "New user joined",
@@ -53,7 +53,8 @@ io.on("connection", (socket) => {
     //     createdAt: 123
     // });
 
-    socket.on("createMessage", (newMessage) => {
+    // add callback argument
+    socket.on("createMessage", (newMessage, callback) => {
         console.log("createMessage", newMessage);
         // socket.emit emits a message to a single connection
         // socket.emit("newMessage", newMessage);
@@ -61,6 +62,8 @@ io.on("connection", (socket) => {
 
         // io.emit emits an event to every single connection
         io.emit("newMessage", generateMessage(newMessage.from, newMessage.text));
+        // send back some data
+        callback("This is from the server");
 
         // send to everybody except this socket
         // socket.broadcast.emit("newMessage", {
