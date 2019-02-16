@@ -3,7 +3,7 @@ const http = require("http");
 const express = require("express");
 const socketIO = require("socket.io");
 
-const {generateMessage} = require("./utils/message");
+const {generateMessage, generateLocationMessage} = require("./utils/message");
 const publicPath = path.join(__dirname, "../public")
 const port = process.env.PORT || 3000;
 
@@ -65,14 +65,15 @@ io.on("connection", (socket) => {
         // send back some data
         callback("This is from the server");
 
-        // send to everybody except this socket
-        // socket.broadcast.emit("newMessage", {
-        //     from: newMessage.from,
-        //     text: newMessage.text,
-        //     createdAt: new Date().toString()
-        // });
+
 
     });
+
+    socket.on("createLocationMessage", (coords) => {
+        //io.emit("newMessage", generateMessage("Admin", `${coords.latitude}, ${coords.longitude}`));
+        // emit a url instead of the coords
+        io.emit("newLocationMessage", generateLocationMessage("Admin", coords.latitude, coords.longitude));
+    })
 
     // inside nodeJs can safely use arrow functions
     // socket.on("createEmail", (newEmail) => {

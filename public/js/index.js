@@ -37,6 +37,17 @@ socket.on("newMessage", function(message) {
     jQuery("#messages").append(li);
 });
 
+// create a listener to receive a location url
+socket.on("newLocationMessage", function(message) {
+    var li = jQuery("<li></li>");
+    var a = jQuery("<a target='_blank'>My current location</>");
+
+    li.text(`${message.from}: `);
+    a.attr("href", message.url);
+    li.append(a);
+    jQuery("#messages").append(li);
+});
+
 // event acknowledgements - standard event emitter, 3rd argument - callback
 // callback function fires when the acknowledge event arrives
 // socket.emit("createMessage", {
@@ -56,4 +67,26 @@ jQuery("#message-form").on("submit", function (e) {
     }, () => {
 
     });
+});
+
+// add the geolocation functionality
+var locationButton = jQuery("#send-location");
+locationButton.on("click", function() {
+
+    if (!navigator.geolocation) {
+        // return alert pop up window
+        return alert("Geolocation not supported by your browser");
+    }
+
+    navigator.geolocation.getCurrentPosition(function(position) {
+
+        socket.emit("createLocationMessage", {
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude
+        });
+        console.log(position);
+
+    }, function() {
+        alert("Unable to fetch location");
+    })
 });
