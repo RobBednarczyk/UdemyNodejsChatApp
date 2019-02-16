@@ -63,7 +63,7 @@ io.on("connection", (socket) => {
         // io.emit emits an event to every single connection
         io.emit("newMessage", generateMessage(newMessage.from, newMessage.text));
         // send back some data
-        callback("This is from the server");
+        callback();
 
 
 
