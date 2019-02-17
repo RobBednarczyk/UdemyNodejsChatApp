@@ -30,24 +30,41 @@ socket.on("disconnect", function() {
 
 // create a listener to a custom event
 socket.on("newMessage", function(message) {
-    // console.log("New message", message);
+    // // console.log("New message", message);
+    // var formattedTime = moment(message.createdAt).format("HH:mm");
+    // // create a DOM element using jQuery
+    // var li = jQuery("<li></li>");
+    // li.text(`${message.from} ${formattedTime}: ${message.text}`);
+    // jQuery("#messages").append(li);
+    var template = jQuery("#message-template").html();
     var formattedTime = moment(message.createdAt).format("HH:mm");
-    // create a DOM element using jQuery
-    var li = jQuery("<li></li>");
-    li.text(`${message.from} ${formattedTime}: ${message.text}`);
-    jQuery("#messages").append(li);
+    var html = Mustache.render(template, {
+        text: message.text,
+        from: message.from,
+        createdAt: formattedTime
+    });
+
+    jQuery("#messages").append(html);
+
 });
 
 // create a listener to receive a location url
 socket.on("newLocationMessage", function(message) {
-    var formattedTime = moment(message.createdAt).format("HH:mm");
-    var li = jQuery("<li></li>");
-    var a = jQuery("<a target='_blank'>My current location</>");
 
-    li.text(`${message.from} ${formattedTime}: `);
-    a.attr("href", message.url);
-    li.append(a);
-    jQuery("#messages").append(li);
+    // var li = jQuery("<li></li>");
+    // var a = jQuery("<a target='_blank'>My current location</>");
+    //
+    // li.text(`${message.from} ${formattedTime}: `);
+    // a.attr("href", message.url);
+    // li.append(a);
+    var template = jQuery("#location-message-template").html();
+    var formattedTime = moment(message.createdAt).format("HH:mm");
+    var html = Mustache.render(template, {
+        from: message.from,
+        url: message.url,
+        createdAt: formattedTime
+    });
+    jQuery("#messages").append(html);
 });
 
 // event acknowledgements - standard event emitter, 3rd argument - callback
