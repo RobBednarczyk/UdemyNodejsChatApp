@@ -22,7 +22,19 @@ function scrollToBottom() {
 
 // use function() istead of arrow function for the mobile browser compatibility
 socket.on("connect", function() {
-    console.log("Connected to server");
+    // get the parameters from the url
+    var params = jQuery.deparam(window.location.search);
+    // emit an event that the server will listen to
+    socket.emit("join", params, function (err) {
+        if (err) {
+            alert(err);
+            // redirect user to the root page
+            window.location.href = "/"
+        } else {
+            console.log("No error");
+        }
+    });
+    //console.log("Connected to server");
 
     // legacy code
     // socket.emit("createEmail", {
@@ -41,11 +53,17 @@ socket.on("disconnect", function() {
     console.log("Disconnected from server");
 });
 
-// create a listener to a custom event
-// socket.on("newEmail", function(email) {
-//     console.log("New email", email);
-//
-// })
+socket.on("updateUserList", function(users) {
+    //console.log("Users list", users);
+    var ol = jQuery("<ol></ol>");
+    users.forEach(function(user) {
+        ol.append(jQuery("<li></li>").text(user))
+    });
+
+    jQuery("#users").html(ol);
+})
+
+
 
 // create a listener to a custom event
 socket.on("newMessage", function(message) {
