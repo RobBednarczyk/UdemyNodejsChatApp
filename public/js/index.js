@@ -1,6 +1,25 @@
 // make a request from the client to the server to open up socket
 // and keep the connection open
 var socket = io();
+
+function scrollToBottom() {
+    // selectors
+    var messages = jQuery("#messages");
+    // select the last list element
+    var newMessage = messages.children("li:last-child")
+    // heights
+    var clientHeight = messages.prop("clientHeight");
+    var scrollTop = messages.prop("scrollTop");
+    var scrollHeight = messages.prop("scrollHeight");
+    var newMessageHeight = newMessage.innerHeight();
+    var lastMessageHeight = newMessage.prev().innerHeight();
+
+    if (clientHeight + scrollTop + newMessageHeight + lastMessageHeight >= scrollHeight) {
+        //console.log("Should scroll");
+        messages.scrollTop(scrollHeight);
+    }
+}
+
 // use function() istead of arrow function for the mobile browser compatibility
 socket.on("connect", function() {
     console.log("Connected to server");
@@ -45,7 +64,7 @@ socket.on("newMessage", function(message) {
     });
 
     jQuery("#messages").append(html);
-
+    scrollToBottom();
 });
 
 // create a listener to receive a location url
@@ -65,6 +84,7 @@ socket.on("newLocationMessage", function(message) {
         createdAt: formattedTime
     });
     jQuery("#messages").append(html);
+    scrollToBottom();
 });
 
 // event acknowledgements - standard event emitter, 3rd argument - callback
