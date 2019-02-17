@@ -121,8 +121,8 @@ jQuery("#message-form").on("submit", function (e) {
 
     var messageTextbox = jQuery("[name=message]");
 
+    // remove the "from" property as the required param
     socket.emit("createMessage", {
-        from: "User",
         text: messageTextbox.val()
     }, () => {
         // clear the message field
